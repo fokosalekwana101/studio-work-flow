@@ -45,6 +45,15 @@ type Tone = (typeof TONES)[number];
 
 const CHECKLIST = ["Facts verified", "Tone verified", "Recipient/audience verified", "Confidential information checked"];
 
+type EmailInput = {
+  recipient: string;
+  audience: Audience;
+  message: string;
+  tone: Tone;
+  intensity: number;
+  style: "concise" | "detailed";
+};
+
 function EmailPage() {
   const { settings } = useAppStore();
   const gen = useServerFn(generateEmail);
@@ -62,7 +71,7 @@ function EmailPage() {
   const [execPolish, setExecPolish] = useState(false);
   const [polishing, setPolishing] = useState(false);
 
-  const { state, run, regenerate, reset } = useGeneration(async (input: Parameters<typeof gen>[0]["data"]) => {
+  const { state, run, regenerate, reset } = useGeneration(async (input: EmailInput) => {
     const result = await gen({ data: input });
     setOriginal(result);
     setPolished(null);

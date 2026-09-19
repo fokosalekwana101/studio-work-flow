@@ -19,13 +19,15 @@ export function useGeneration<TInput, TResult>(fn: (input: TInput) => Promise<TR
       setState({ status: "loading" });
       try {
         const data = await fn(input);
-        if (id !== runs.current) return;
+        if (id !== runs.current) return undefined;
         setState({ status: "success", data, runId: id });
         return data;
       } catch (e) {
-        if (id !== runs.current) return;
-        const message = e instanceof Error ? e.message : "Something went wrong. Please try again.";
-        setState({ status: "error", message });
+        if (id === runs.current) {
+          const message = e instanceof Error ? e.message : "Something went wrong. Please try again.";
+          setState({ status: "error", message });
+        }
+        return undefined;
       }
     },
     [fn],
