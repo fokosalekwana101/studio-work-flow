@@ -19,7 +19,7 @@ export function useGeneration<TInput, TResult>(fn: (input: TInput) => Promise<TR
       setState({ status: "loading" });
       try {
         const data = await fn(input);
-        if (id !== runs.current) return;
+        if (id !== runs.current) return undefined;
         setState({ status: "success", data, runId: id });
         return data;
       } catch (e) {
