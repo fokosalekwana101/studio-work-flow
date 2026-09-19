@@ -45,7 +45,7 @@ export const Route = createFileRoute("/api/chat")({
               originalMessages: messages as UIMessage[],
               sendReasoning: false,
               onError: (error) => toFriendlyError(error).message,
-              headers: initialRunId ? { "X-Lovable-AIG-Run-ID": initialRunId } : undefined,
+              ...(initialRunId ? { headers: { "X-Lovable-AIG-Run-ID": initialRunId } } : {}),
             }),
             runIdFetch,
           );
